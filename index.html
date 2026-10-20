@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ôn tập An toàn bảo mật thông tin</title>
+<style>
+:root {
+  --bg:#fafaf7; --fg:#1d1d1b; --muted:#6b6b66; --card:#ffffff; --line:#e4e2da;
+  --accent:#b4501f; --code-bg:#1e1e24; --code-fg:#e8e6df; --inline-bg:#efece3;
+  --quote:#fff4e8;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg:#16161a; --fg:#e8e6df; --muted:#9a9890; --card:#1f1f25; --line:#33333b;
+    --accent:#f08a54; --code-bg:#0e0e12; --code-fg:#e8e6df; --inline-bg:#2a2a32;
+    --quote:#2a2219;
+  }
+}
+* { box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body {
+  margin:0; background:var(--bg); color:var(--fg);
+  font:16px/1.7 -apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+}
+.layout { display:flex; max-width:1200px; margin:0 auto; }
+nav {
+  position:sticky; top:0; align-self:flex-start; height:100vh; overflow:auto;
+  width:290px; flex:none; padding:24px 16px; border-right:1px solid var(--line);
+  font-size:14px;
+}
+nav h2 { font-size:13px; text-transform:uppercase; letter-spacing:.08em; color:var(--muted); margin:0 0 12px; }
+nav ul { list-style:none; margin:0; padding:0; }
+nav li ul { padding-left:14px; border-left:1px solid var(--line); margin:4px 0 8px; }
+nav a { color:var(--fg); text-decoration:none; display:block; padding:3px 6px; border-radius:4px; }
+nav a:hover { background:var(--inline-bg); color:var(--accent); }
+main { flex:1; min-width:0; padding:32px 40px 80px; }
+header.top { margin-bottom:28px; padding-bottom:18px; border-bottom:2px solid var(--accent); }
+header.top h1 { margin:0 0 6px; font-size:30px; }
+header.top p { margin:0; color:var(--muted); }
+main > h1:first-child { display:none; }
+h1 { font-size:26px; margin:48px 0 12px; padding-bottom:6px; border-bottom:1px solid var(--line); color:var(--accent); }
+h2 { font-size:21px; margin:36px 0 10px; }
+h3 { font-size:17px; margin:24px 0 6px; }
+h1,h2,h3 { scroll-margin-top:16px; line-height:1.3; }
+p, li { max-width:78ch; }
+blockquote {
+  margin:16px 0; padding:10px 16px; background:var(--quote);
+  border-left:4px solid var(--accent); border-radius:0 6px 6px 0;
+}
+blockquote p { margin:4px 0; }
+code {
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:.9em;
+  background:var(--inline-bg); padding:1px 6px; border-radius:4px;
+}
+pre {
+  position:relative; background:var(--code-bg); color:var(--code-fg);
+  padding:34px 16px 14px; border-radius:8px; overflow:auto; margin:16px 0;
+  line-height:1.5; font-size:14px;
+}
+pre code { background:none; padding:0; color:inherit; font-size:inherit; }
+pre::before {
+  content:attr(data-lang); position:absolute; top:8px; left:14px;
+  font:11px/1 ui-monospace,Menlo,monospace; text-transform:uppercase;
+  letter-spacing:.08em; color:#8b8a85;
+}
+.copy {
+  position:absolute; top:6px; right:8px; font-size:12px; cursor:pointer;
+  background:#34343d; color:#ddd; border:0; border-radius:4px; padding:3px 9px;
+}
+.copy:hover { background:var(--accent); color:#fff; }
+table { border-collapse:collapse; width:100%; margin:16px 0; background:var(--card); font-size:15px; }
+th, td { border:1px solid var(--line); padding:8px 12px; text-align:left; vertical-align:top; }
+th { background:var(--inline-bg); }
+hr { border:0; border-top:1px solid var(--line); margin:32px 0; }
+.table-wrap { overflow-x:auto; }
+@media (max-width: 860px) {
+  nav { display:none; }
+  main { padding:20px 16px 60px; }
+}
+@media print {
+  nav, .copy { display:none; }
+  body { background:#fff; color:#000; }
+  pre { white-space:pre-wrap; border:1px solid #999; background:#f5f5f5; color:#000; }
+  h1 { page-break-before:auto; }
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  <nav>
+    <h2>Mục lục</h2>
+    <div class="toc">
+<ul>
+<li><a href="#on-tap-kien-thuc-an-toan-bao-mat-thong-tin">ÔN TẬP KIẾN THỨC AN TOÀN BẢO MẬT THÔNG TIN</a></li>
+<li><a href="#phan-a-ma-hoa-co-ien">PHẦN A. MÃ HÓA CỔ ĐIỂN</a><ul>
+<li><a href="#bai-1-ma-hoa-caesar">Bài 1. Mã hóa Caesar</a></li>
+<li><a href="#bai-2-ma-hoa-thay-the-monoalphabetic-substitution">Bài 2. Mã hóa thay thế (Monoalphabetic Substitution)</a></li>
+<li><a href="#bai-3-ma-hoa-vigenere">Bài 3. Mã hóa Vigenère</a></li>
+<li><a href="#bai-4-ma-hoa-affine">Bài 4. Mã hóa Affine</a></li>
+</ul>
+</li>
+<li><a href="#phan-b-ma-hoa-hien-ai">PHẦN B. MÃ HÓA HIỆN ĐẠI</a><ul>
+<li><a href="#bai-5-ma-hoa-des">Bài 5. Mã hóa DES</a></li>
+<li><a href="#bai-6-ma-hoa-aes">Bài 6. Mã hóa AES</a></li>
+<li><a href="#bai-7-ma-hoa-rsa">Bài 7. Mã hóa RSA</a></li>
+</ul>
+</li>
+<li><a href="#phan-c-ham-bam-md5">PHẦN C. HÀM BĂM MD5</a><ul>
+<li><a href="#bai-8-ham-bam-md5-4-bai-nho">Bài 8. Hàm băm MD5 (4 bài nhỏ)</a></li>
+</ul>
+</li>
+<li><a href="#phan-d-phan-tich-tan-cong">PHẦN D. PHÂN TÍCH TẤN CÔNG</a><ul>
+<li><a href="#bai-9-tan-cong-vet-can-brute-force-len-caesar">Bài 9. Tấn công vét cạn (Brute Force) lên Caesar</a></li>
+<li><a href="#bai-10-phan-tich-tan-suat-frequency-analysis">Bài 10. Phân tích tần suất (Frequency Analysis)</a></li>
+<li><a href="#bai-11-tan-cong-va-cham-collision">Bài 11. Tấn công va chạm (Collision)</a></li>
+</ul>
+</li>
+<li><a href="#phan-e-so-sanh-thuat-toan">PHẦN E. SO SÁNH THUẬT TOÁN</a><ul>
+<li><a href="#bai-12-so-sanh-ma-hoa-va-ham-bam">Bài 12. So sánh mã hóa và hàm băm</a></li>
+</ul>
+</li>
+<li><a href="#phan-f-chu-ky-so-rsasha">PHẦN F. CHỮ KÝ SỐ RSA–SHA</a><ul>
+<li><a href="#bai-13-tao-va-kiem-tra-chu-ky-so">Bài 13. Tạo và kiểm tra chữ ký số</a></li>
+</ul>
+</li>
+<li><a href="#phan-g-chung-thu-so-digital-certificate">PHẦN G. CHỨNG THƯ SỐ (DIGITAL CERTIFICATE)</a><ul>
+<li><a href="#bai-14-chung-thu-so-va-pki">Bài 14. Chứng thư số và PKI</a></li>
+</ul>
+</li>
+<li><a href="#phan-h-tom-tat-nhanh-e-hoc-thuoc">PHẦN H. TÓM TẮT NHANH ĐỂ HỌC THUỘC</a></li>
+</ul>
+</div>
+
+  </nav>
+  <main>
+    <header class="top">
+      <h1>Ôn tập An toàn bảo mật thông tin</h1>
+      <p>Ý nghĩa từng bài · Nguyên lý · Code Python có giải thích chi tiết</p>
+    </header>
+    <h1 id="on-tap-kien-thuc-an-toan-bao-mat-thong-tin">ÔN TẬP KIẾN THỨC AN TOÀN BẢO MẬT THÔNG TIN</h1>
+<blockquote>
+<p>Cách dùng: mỗi bài gồm <strong>(1) Ý nghĩa</strong>, <strong>(2) Nguyên lý</strong>, <strong>(3) Code Python + giải thích</strong>, <strong>(4) Lưu ý khi thi/báo cáo</strong>.
+Các bài dùng thư viện ngoài (DES, AES, chứng thư số) cần cài: <code>pip install pycryptodome cryptography</code></p>
+</blockquote>
+<hr />
+<h1 id="phan-a-ma-hoa-co-ien">PHẦN A. MÃ HÓA CỔ ĐIỂN</h1>
+<h2 id="bai-1-ma-hoa-caesar">Bài 1. Mã hóa Caesar</h2>
+<h3 id="1-y-nghia-cua-bai">1. Ý nghĩa của bài</h3>
+<p>Đây là bài <strong>nhập môn</strong>: giúp hiểu khái niệm cơ bản nhất của mật mã gồm <em>bản rõ (plaintext)</em>, <em>bản mã (ciphertext)</em>, <em>khóa (key)</em>, <em>mã hóa</em> và <em>giải mã</em>. Caesar còn là "vật thí nghiệm" để học tấn công vét cạn (brute force) ở phần sau.</p>
+<h3 id="2-nguyen-ly">2. Nguyên lý</h3>
+<ul>
+<li>Dịch mỗi chữ cái đi <strong>k</strong> vị trí trong bảng chữ cái (26 chữ).</li>
+<li>Mã hóa: <code>C = (P + k) mod 26</code></li>
+<li>Giải mã: <code>P = (C - k) mod 26</code></li>
+<li>Không gian khóa chỉ có <strong>26</strong> giá trị → rất yếu.</li>
+</ul>
+<h3 id="3-code">3. Code</h3>
+<pre data-lang="python"><code class="language-python">def caesar_encrypt(text, k):
+    result = &quot;&quot;
+    for c in text.upper():
+        if c.isalpha():
+            # ord('A') = 65. Trừ 65 để đưa chữ về 0..25
+            p = ord(c) - ord('A')
+            # cộng khóa, lấy mod 26 để &quot;quay vòng&quot; (Z + 1 -&gt; A)
+            result += chr((p + k) % 26 + ord('A'))
+        else:
+            result += c          # giữ nguyên dấu cách, số, ký tự khác
+    return result
+
+def caesar_decrypt(text, k):
+    # Giải mã = mã hóa với khóa ngược (-k)
+    return caesar_encrypt(text, -k)
+
+plain = &quot;HELLO WORLD&quot;
+cipher = caesar_encrypt(plain, 3)
+print(&quot;Ban ma :&quot;, cipher)                    # KHOOR ZRUOG
+print(&quot;Giai ma:&quot;, caesar_decrypt(cipher, 3)) # HELLO WORLD
+</code></pre>
+<p><strong>Giải thích chi tiết:</strong>
+- <code>ord(c)</code> đổi ký tự thành mã số (A=65...Z=90); <code>chr()</code> làm ngược lại.
+- <code>(p + k) % 26</code> giúp vòng lại đầu bảng chữ cái. Python xử lý <code>%</code> với số âm vẫn cho kết quả dương nên giải mã bằng <code>-k</code> hoạt động đúng.
+- <code>c.isalpha()</code> kiểm tra có phải chữ cái, ký tự khác không bị mã hóa.</p>
+<h3 id="4-luu-y">4. Lưu ý</h3>
+<p>Khóa k=3 là bản gốc của Julius Caesar. Chỉ 25 khóa có ích (k=0 không đổi gì) nên bị phá trong vài mili-giây.</p>
+<hr />
+<h2 id="bai-2-ma-hoa-thay-the-monoalphabetic-substitution">Bài 2. Mã hóa thay thế (Monoalphabetic Substitution)</h2>
+<h3 id="1-y-nghia-cua-bai_1">1. Ý nghĩa của bài</h3>
+<p>Mở rộng từ Caesar: thay vì dịch đều, mỗi chữ cái được thay bằng <strong>một chữ cái bất kỳ</strong> theo bảng hoán vị. Bài giúp hiểu rằng <em>không gian khóa lớn chưa chắc an toàn</em> vì còn bị <strong>phân tích tần suất</strong>.</p>
+<h3 id="2-nguyen-ly_1">2. Nguyên lý</h3>
+<ul>
+<li>Khóa là một hoán vị của 26 chữ cái → số khóa = 26! ≈ 4×10²⁶ (vét cạn gần như bất khả thi).</li>
+<li>Nhưng mỗi chữ cái luôn được thay bằng cùng 1 chữ → <strong>giữ nguyên tần suất</strong> → dễ phá bằng thống kê.</li>
+</ul>
+<h3 id="3-code_1">3. Code</h3>
+<pre data-lang="python"><code class="language-python">import random
+import string
+
+ALPHABET = string.ascii_uppercase   # &quot;ABC...XYZ&quot;
+
+def tao_khoa():
+    chars = list(ALPHABET)
+    random.shuffle(chars)           # xáo trộn ngẫu nhiên
+    return &quot;&quot;.join(chars)           # ví dụ &quot;QWERTYUIOPASDFGHJKLZXCVBNM&quot;
+
+def ma_hoa(text, key):
+    # Bảng ánh xạ: A-&gt;key[0], B-&gt;key[1], ...
+    bang = str.maketrans(ALPHABET, key)
+    return text.upper().translate(bang)
+
+def giai_ma(text, key):
+    # Bảng ngược: key[i] -&gt; ALPHABET[i]
+    bang = str.maketrans(key, ALPHABET)
+    return text.upper().translate(bang)
+
+key = tao_khoa()
+c = ma_hoa(&quot;ATTACK AT DAWN&quot;, key)
+print(&quot;Khoa   :&quot;, key)
+print(&quot;Ban ma :&quot;, c)
+print(&quot;Giai ma:&quot;, giai_ma(c, key))
+</code></pre>
+<p><strong>Giải thích:</strong> <code>str.maketrans(a, b)</code> tạo bảng thay thế ký tự thứ i của <code>a</code> bằng ký tự thứ i của <code>b</code>; <code>translate</code> áp dụng bảng đó lên chuỗi. Ký tự không có trong bảng (dấu cách) được giữ nguyên.</p>
+<hr />
+<h2 id="bai-3-ma-hoa-vigenere">Bài 3. Mã hóa Vigenère</h2>
+<h3 id="1-y-nghia-cua-bai_2">1. Ý nghĩa của bài</h3>
+<p>Giới thiệu <strong>mã đa bảng (polyalphabetic)</strong>: cùng một chữ cái có thể được mã hóa thành nhiều chữ khác nhau → làm mờ tần suất. Bài giúp hiểu cách cải tiến Caesar bằng <em>khóa dạng từ</em>.</p>
+<h3 id="2-nguyen-ly_2">2. Nguyên lý</h3>
+<ul>
+<li>Khóa là một từ (ví dụ <code>KEY</code>), lặp lại cho đủ độ dài văn bản.</li>
+<li>Mỗi chữ dùng một Caesar với độ dịch khác nhau theo ký tự khóa tương ứng.</li>
+<li>Mã hóa: <code>C_i = (P_i + K_i) mod 26</code>; Giải mã: <code>P_i = (C_i − K_i) mod 26</code>.</li>
+</ul>
+<h3 id="3-code_2">3. Code</h3>
+<pre data-lang="python"><code class="language-python">def vigenere(text, key, decrypt=False):
+    result = &quot;&quot;
+    key = key.upper()
+    j = 0                                   # chỉ số ký tự khóa (chỉ tăng khi gặp chữ cái)
+    for c in text.upper():
+        if c.isalpha():
+            k = ord(key[j % len(key)]) - ord('A')   # độ dịch từ ký tự khóa
+            if decrypt:
+                k = -k
+            result += chr((ord(c) - ord('A') + k) % 26 + ord('A'))
+            j += 1
+        else:
+            result += c
+    return result
+
+c = vigenere(&quot;ATTACK AT DAWN&quot;, &quot;LEMON&quot;)
+print(c)                                # LXFOPV EF RNHR
+print(vigenere(c, &quot;LEMON&quot;, decrypt=True))
+</code></pre>
+<p><strong>Giải thích:</strong> <code>j % len(key)</code> giúp khóa lặp vòng. Ta chỉ tăng <code>j</code> với chữ cái để dấu cách không "ăn" mất ký tự khóa.</p>
+<h3 id="4-luu-y_1">4. Lưu ý</h3>
+<p>Vẫn bị phá bằng <strong>Kasiski / Index of Coincidence</strong> khi đoán được độ dài khóa. Khóa càng dài và ngẫu nhiên thì càng an toàn (cực đại: one-time pad).</p>
+<hr />
+<h2 id="bai-4-ma-hoa-affine">Bài 4. Mã hóa Affine</h2>
+<h3 id="1-y-nghia-cua-bai_3">1. Ý nghĩa của bài</h3>
+<p>Kết hợp <strong>nhân + cộng</strong> trong số học đồng dư. Bài giúp hiểu vai trò của <strong>nghịch đảo modulo</strong> và điều kiện <code>gcd(a, 26) = 1</code> — nền tảng toán học cho RSA sau này.</p>
+<h3 id="2-nguyen-ly_3">2. Nguyên lý</h3>
+<ul>
+<li>Khóa (a, b), với <code>gcd(a, 26) = 1</code> (a ∈ {1,3,5,7,9,11,15,17,19,21,23,25}).</li>
+<li>Mã hóa: <code>C = (a·P + b) mod 26</code></li>
+<li>Giải mã: <code>P = a⁻¹·(C − b) mod 26</code>, trong đó a⁻¹ là nghịch đảo của a theo mod 26.</li>
+<li>Số khóa: 12 × 26 = 312 → vẫn rất yếu.</li>
+</ul>
+<h3 id="3-code_3">3. Code</h3>
+<pre data-lang="python"><code class="language-python">from math import gcd
+
+def affine_encrypt(text, a, b):
+    assert gcd(a, 26) == 1, &quot;a phai nguyen to cung nhau voi 26&quot;
+    out = &quot;&quot;
+    for c in text.upper():
+        if c.isalpha():
+            out += chr((a * (ord(c) - 65) + b) % 26 + 65)
+        else:
+            out += c
+    return out
+
+def affine_decrypt(text, a, b):
+    a_inv = pow(a, -1, 26)          # nghich dao modulo (Python &gt;= 3.8)
+    out = &quot;&quot;
+    for c in text.upper():
+        if c.isalpha():
+            out += chr((a_inv * ((ord(c) - 65) - b)) % 26 + 65)
+        else:
+            out += c
+    return out
+
+c = affine_encrypt(&quot;HELLO&quot;, 5, 8)
+print(c)                              # RCLLA
+print(affine_decrypt(c, 5, 8))        # HELLO
+</code></pre>
+<p><strong>Giải thích:</strong> <code>pow(a, -1, 26)</code> tính nghịch đảo modulo (số x sao cho a·x ≡ 1 mod 26). Nếu <code>gcd(a,26) ≠ 1</code> thì không tồn tại nghịch đảo → không giải mã được, nên phải có <code>assert</code>.</p>
+<hr />
+<h1 id="phan-b-ma-hoa-hien-ai">PHẦN B. MÃ HÓA HIỆN ĐẠI</h1>
+<h2 id="bai-5-ma-hoa-des">Bài 5. Mã hóa DES</h2>
+<h3 id="1-y-nghia-cua-bai_4">1. Ý nghĩa của bài</h3>
+<p>Làm quen với <strong>mã khối đối xứng</strong> đầu tiên được chuẩn hóa. Hiểu các khái niệm: khối (block), khóa, chế độ hoạt động (ECB/CBC), padding và <strong>vì sao DES bị thay thế</strong>.</p>
+<h3 id="2-nguyen-ly_4">2. Nguyên lý</h3>
+<ul>
+<li>Khối 64-bit, khóa 56-bit hiệu dụng (8 byte với bit kiểm tra chẵn lẻ).</li>
+<li>Cấu trúc <strong>Feistel</strong>, 16 vòng.</li>
+<li>Khóa 56-bit quá ngắn → bị vét cạn được (từ cuối thập niên 1990). Thay bằng 3DES rồi AES.</li>
+</ul>
+<h3 id="3-code_4">3. Code</h3>
+<pre data-lang="python"><code class="language-python">from Crypto.Cipher import DES
+from Crypto.Util.Padding import pad, unpad
+
+key = b&quot;8bytekey&quot;                     # DES can dung 8 byte
+data = &quot;Xin chao DES&quot;.encode(&quot;utf-8&quot;)
+
+# --- Ma hoa ---
+cipher = DES.new(key, DES.MODE_ECB)
+ct = cipher.encrypt(pad(data, DES.block_size))   # block_size = 8
+print(&quot;Ban ma (hex):&quot;, ct.hex())
+
+# --- Giai ma ---
+decipher = DES.new(key, DES.MODE_ECB)
+pt = unpad(decipher.decrypt(ct), DES.block_size)
+print(&quot;Ban ro:&quot;, pt.decode(&quot;utf-8&quot;))
+</code></pre>
+<p><strong>Giải thích:</strong>
+- Mã khối chỉ xử lý dữ liệu có độ dài bội của 8 byte, nên dùng <code>pad</code> (đệm PKCS#7) trước khi mã hóa và <code>unpad</code> sau khi giải mã.
+- Dữ liệu phải ở dạng <code>bytes</code> (nên <code>.encode()</code>).
+- <code>MODE_ECB</code> đơn giản nhưng <strong>không an toàn</strong> (khối giống nhau cho bản mã giống nhau); chỉ dùng để học. Thực tế dùng CBC/GCM.</p>
+<hr />
+<h2 id="bai-6-ma-hoa-aes">Bài 6. Mã hóa AES</h2>
+<h3 id="1-y-nghia-cua-bai_5">1. Ý nghĩa của bài</h3>
+<p>AES là <strong>chuẩn mã hóa đối xứng hiện nay</strong> (HTTPS, Wi-Fi WPA2, ngân hàng). Bài giúp hiểu cách mã hóa thực tế dùng <strong>khóa + IV + chế độ CBC/GCM</strong>.</p>
+<h3 id="2-nguyen-ly_5">2. Nguyên lý</h3>
+<ul>
+<li>Khối 128-bit; khóa 128/192/256-bit (10/12/14 vòng).</li>
+<li>Mỗi vòng: SubBytes → ShiftRows → MixColumns → AddRoundKey.</li>
+<li>Chế độ CBC cần <strong>IV</strong> ngẫu nhiên: cùng bản rõ, cùng khóa nhưng IV khác → bản mã khác.</li>
+</ul>
+<h3 id="3-code_5">3. Code</h3>
+<pre data-lang="python"><code class="language-python">from Crypto.Cipher import AES
+from Crypto.Random import get_random_bytes
+from Crypto.Util.Padding import pad, unpad
+
+key = get_random_bytes(16)             # AES-128: khoa 16 byte ngau nhien
+iv = get_random_bytes(16)              # IV 16 byte ngau nhien
+data = &quot;Thong tin bi mat&quot;.encode()
+
+enc = AES.new(key, AES.MODE_CBC, iv)
+ct = enc.encrypt(pad(data, AES.block_size))   # block_size = 16
+print(&quot;Ban ma:&quot;, ct.hex())
+
+dec = AES.new(key, AES.MODE_CBC, iv)   # phai dung CUNG key va iv
+pt = unpad(dec.decrypt(ct), AES.block_size)
+print(&quot;Ban ro:&quot;, pt.decode())
+</code></pre>
+<p><strong>Giải thích:</strong> IV không cần bí mật nhưng phải ngẫu nhiên và được gửi kèm bản mã. Người nhận cần đúng cả <code>key</code> lẫn <code>iv</code> mới giải mã được.</p>
+<hr />
+<h2 id="bai-7-ma-hoa-rsa">Bài 7. Mã hóa RSA</h2>
+<h3 id="1-y-nghia-cua-bai_6">1. Ý nghĩa của bài</h3>
+<p>Hiểu <strong>mật mã khóa công khai (bất đối xứng)</strong>: khóa mã hóa và giải mã khác nhau, giải quyết bài toán <em>trao đổi khóa</em> và là nền tảng cho chữ ký số, chứng thư số.</p>
+<h3 id="2-nguyen-ly_6">2. Nguyên lý</h3>
+<ol>
+<li>Chọn hai số nguyên tố p, q. Tính <code>n = p·q</code>, <code>φ(n) = (p−1)(q−1)</code>.</li>
+<li>Chọn e với <code>gcd(e, φ(n)) = 1</code>.</li>
+<li>Tính d sao cho <code>e·d ≡ 1 (mod φ(n))</code>.</li>
+<li>Khóa công khai (e, n); khóa bí mật (d, n).</li>
+<li>Mã hóa: <code>C = M^e mod n</code>; Giải mã: <code>M = C^d mod n</code>.
+- An toàn dựa trên độ khó của <strong>phân tích n ra thừa số nguyên tố</strong>.</li>
+</ol>
+<h3 id="3-code-ban-mini-so-nho-e-hoc-nguyen-ly">3. Code (bản mini, số nhỏ để học nguyên lý)</h3>
+<pre data-lang="python"><code class="language-python">from math import gcd
+
+p, q = 61, 53
+n = p * q                      # 3233
+phi = (p - 1) * (q - 1)        # 3120
+
+e = 17
+assert gcd(e, phi) == 1
+d = pow(e, -1, phi)            # 2753: nghich dao cua e theo mod phi
+
+print(&quot;Khoa cong khai:&quot;, (e, n))
+print(&quot;Khoa bi mat   :&quot;, (d, n))
+
+M = 65                         # ban ro (so nguyen &lt; n)
+C = pow(M, e, n)               # ma hoa:  M^e mod n
+print(&quot;Ban ma:&quot;, C)            # 2790
+
+M2 = pow(C, d, n)              # giai ma: C^d mod n
+print(&quot;Giai ma:&quot;, M2)          # 65
+</code></pre>
+<p><strong>Giải thích:</strong> <code>pow(a, b, n)</code> tính lũy thừa theo modulo rất nhanh (không tính a^b rồi mới chia). Thực tế p, q có ~1024 bit và phải dùng padding (OAEP); bản trên chỉ để minh họa công thức.</p>
+<h3 id="4-luu-y_2">4. Lưu ý</h3>
+<p>RSA chậm, thường chỉ dùng để mã hóa <strong>khóa phiên AES</strong> hoặc để <strong>ký số</strong>; dữ liệu lớn mã hóa bằng AES (mã hóa lai).</p>
+<hr />
+<h1 id="phan-c-ham-bam-md5">PHẦN C. HÀM BĂM MD5</h1>
+<h2 id="bai-8-ham-bam-md5-4-bai-nho">Bài 8. Hàm băm MD5 (4 bài nhỏ)</h2>
+<h3 id="1-y-nghia">1. Ý nghĩa</h3>
+<p>Phân biệt <strong>hàm băm</strong> với <strong>mã hóa</strong>: băm là một chiều, không giải ngược, dùng để <em>kiểm tra toàn vẹn</em>. Biết MD5 nay đã lỗi thời.</p>
+<h3 id="2-tinh-chat">2. Tính chất</h3>
+<ul>
+<li>Đầu ra cố định 128-bit (32 ký tự hex) bất kể độ dài đầu vào.</li>
+<li>Xác định: cùng đầu vào → cùng hash.</li>
+<li><strong>Hiệu ứng tuyết lở (avalanche)</strong>: đổi 1 ký tự → hash đổi hoàn toàn.</li>
+<li>Yếu: bị tấn công va chạm (collision).</li>
+</ul>
+<h3 id="bai-1-tao-hash-md5">Bài 1 – Tạo hash MD5</h3>
+<p><em>Ý nghĩa:</em> làm quen với việc sinh "dấu vân tay" của dữ liệu.</p>
+<pre data-lang="python"><code class="language-python">import hashlib
+
+def md5_hash(text):
+    # encode(): chuoi -&gt; bytes (hash can bytes); hexdigest(): ra chuoi hex
+    return hashlib.md5(text.encode()).hexdigest()
+
+print(md5_hash(&quot;HELLO&quot;))   # chuoi 32 ky tu hex = 128 bit
+</code></pre>
+<h3 id="bai-2-kiem-tra-toan-ven">Bài 2 – Kiểm tra toàn vẹn</h3>
+<p><em>Ý nghĩa:</em> hiểu ứng dụng thực tế: so hash dữ liệu gốc với dữ liệu nhận được để phát hiện bị sửa.</p>
+<pre data-lang="python"><code class="language-python">goc = &quot;Chuyen khoan 1000 USD&quot;
+nhan = &quot;Chuyen khoan 9000 USD&quot;
+
+if md5_hash(goc) == md5_hash(nhan):
+    print(&quot;Du lieu toan ven&quot;)
+else:
+    print(&quot;Du lieu BI THAY DOI&quot;)
+</code></pre>
+<h3 id="bai-3-hieu-ung-tuyet-lo">Bài 3 – Hiệu ứng tuyết lở</h3>
+<p><em>Ý nghĩa:</em> thấy rằng thay đổi rất nhỏ làm hash khác hẳn → không thể đoán gần đúng.</p>
+<pre data-lang="python"><code class="language-python">h1 = md5_hash(&quot;HELLO&quot;)
+h2 = md5_hash(&quot;HELLO!&quot;)
+print(h1)
+print(h2)
+
+# Dem so bit khac nhau giua hai hash
+b1 = bin(int(h1, 16))[2:].zfill(128)
+b2 = bin(int(h2, 16))[2:].zfill(128)
+khac = sum(x != y for x, y in zip(b1, b2))
+print(&quot;So bit khac:&quot;, khac, &quot;/ 128&quot;)   # xap xi 64 (50%)
+</code></pre>
+<p><em>Giải thích:</em> chuyển hex → số nguyên → chuỗi nhị phân 128 bit, đếm vị trí khác nhau. Kết quả ~50% bit đổi là dấu hiệu hàm băm tốt.</p>
+<h3 id="bai-4-so-sanh-bao-mat">Bài 4 – So sánh bảo mật</h3>
+<p><em>Ý nghĩa:</em> rút ra kết luận: MD5 <strong>nhanh nhưng yếu</strong> (collision, brute force/rainbow table) → thay bằng SHA-256.</p>
+<h3 id="bai-mo-rong-bam-file">Bài mở rộng – Băm file</h3>
+<pre data-lang="python"><code class="language-python">def md5_file(path):
+    h = hashlib.md5()
+    with open(path, &quot;rb&quot;) as f:                 # 'rb': doc dang nhi phan
+        for chunk in iter(lambda: f.read(4096), b&quot;&quot;):
+            h.update(chunk)                     # bam tung khoi, khong ton RAM
+    return h.hexdigest()
+# So sanh ket qua voi hash nha cung cap cong bo de kiem tra file tai ve
+</code></pre>
+<hr />
+<h1 id="phan-d-phan-tich-tan-cong">PHẦN D. PHÂN TÍCH TẤN CÔNG</h1>
+<h2 id="bai-9-tan-cong-vet-can-brute-force-len-caesar">Bài 9. Tấn công vét cạn (Brute Force) lên Caesar</h2>
+<h3 id="1-y-nghia_1">1. Ý nghĩa</h3>
+<p>Hiểu rằng <strong>thuật toán có ít khóa là không an toàn</strong>: kẻ tấn công chỉ cần thử hết.</p>
+<h3 id="2-code">2. Code</h3>
+<pre data-lang="python"><code class="language-python">def caesar_decrypt(text, k):
+    result = &quot;&quot;
+    for c in text:
+        if c.isalpha():
+            base = ord('A')
+            result += chr((ord(c) - base - k) % 26 + base)
+        else:
+            result += c
+    return result
+
+cipher = &quot;KHOOR&quot;
+for k in range(26):                       # thu tat ca khoa 0..25
+    print(k, caesar_decrypt(cipher, k))   # k=3 -&gt; HELLO (nghia, nhan ra bang mat)
+</code></pre>
+<p><strong>Giải thích:</strong> vòng lặp thử mọi khóa; người phân tích đọc danh sách và chọn bản có nghĩa. Có thể tự động hóa bằng cách chấm điểm theo từ điển tiếng Anh.</p>
+<h2 id="bai-10-phan-tich-tan-suat-frequency-analysis">Bài 10. Phân tích tần suất (Frequency Analysis)</h2>
+<h3 id="1-y-nghia_2">1. Ý nghĩa</h3>
+<p>Hiểu rằng mã thay thế <strong>để lộ quy luật thống kê</strong> của ngôn ngữ (tiếng Anh: E, T, A, O, I, N thường gặp nhất).</p>
+<h3 id="2-code_1">2. Code</h3>
+<pre data-lang="python"><code class="language-python">from collections import Counter
+
+cipher = &quot;WKLV LV D VHFUHW PHVVDJH&quot;
+chi_chu = [c for c in cipher if c.isalpha()]
+freq = Counter(chi_chu)
+tong = len(chi_chu)
+
+for ch, dem in freq.most_common():
+    print(f&quot;{ch}: {dem:2d}  ({dem / tong * 100:.1f}%)&quot;)
+
+# So sanh voi tan suat tieng Anh: E T A O I N S H R ...
+</code></pre>
+<p><strong>Giải thích:</strong> <code>Counter</code> đếm số lần mỗi ký tự; <code>most_common()</code> sắp xếp giảm dần. Ký tự mã hóa nào đứng đầu nhiều khả năng ứng với <code>E</code>, kế đến <code>T</code>, <code>A</code>... Từ đó dựng ánh xạ và hiệu chỉnh dần.</p>
+<h2 id="bai-11-tan-cong-va-cham-collision">Bài 11. Tấn công va chạm (Collision)</h2>
+<h3 id="1-y-nghia_3">1. Ý nghĩa</h3>
+<p>Hai đầu vào khác nhau cho <strong>cùng hash</strong> → kẻ tấn công thay tài liệu giả mà chữ ký/hash vẫn hợp lệ. Vì vậy MD5, SHA-1 không còn tin cậy.</p>
+<h3 id="2-code-mo-phong-va-cham-tren-hash-rut-gon">2. Code mô phỏng (va chạm trên hash rút gọn)</h3>
+<pre data-lang="python"><code class="language-python">import hashlib, itertools, string
+
+def md5_short(text, so_hex=4):
+    # Cat hash con 4 ky tu hex (16 bit) de mo phong de tim va cham
+    return hashlib.md5(text.encode()).hexdigest()[:so_hex]
+
+seen = {}
+for length in range(1, 6):
+    for combo in itertools.product(string.ascii_lowercase, repeat=length):
+        s = &quot;&quot;.join(combo)
+        h = md5_short(s)
+        if h in seen and seen[h] != s:
+            print(&quot;VA CHAM:&quot;, seen[h], &quot;va&quot;, s, &quot;-&gt;&quot;, h)
+            raise SystemExit
+        seen[h] = s
+</code></pre>
+<p><strong>Giải thích:</strong> với hash chỉ 16 bit, theo <em>nghịch lý ngày sinh</em> chỉ cần khoảng 2⁸ = 256 chuỗi là đã có va chạm. Với MD5 đủ 128 bit va chạm thật vẫn tìm được bằng các kỹ thuật toán học (Wang, 2004) – chỉ cần mô phỏng ở đây để hiểu khái niệm.</p>
+<h3 id="ket-luan-phan-d">Kết luận phần D</h3>
+<p>Brute force: tốn thời gian nhưng chắc chắn thành công khi ít khóa; Frequency: phá mã thay thế cổ điển; Collision: nguy hiểm với hash yếu. Hệ hiện đại phải chống được cả ba.</p>
+<hr />
+<h1 id="phan-e-so-sanh-thuat-toan">PHẦN E. SO SÁNH THUẬT TOÁN</h1>
+<h2 id="bai-12-so-sanh-ma-hoa-va-ham-bam">Bài 12. So sánh mã hóa và hàm băm</h2>
+<h3 id="1-y-nghia_4">1. Ý nghĩa</h3>
+<p>Phân biệt <strong>cổ điển vs hiện đại</strong>, <strong>mã hóa (2 chiều, cần khóa) vs hàm băm (1 chiều)</strong>, từ đó chọn thuật toán đúng cho nhu cầu.</p>
+<h3 id="2-bang-so-sanh-ma-hoa">2. Bảng so sánh mã hóa</h3>
+<table>
+<thead>
+<tr>
+<th>Thuật toán</th>
+<th>Độ phức tạp</th>
+<th>Bảo mật</th>
+<th>Ứng dụng</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Caesar</td>
+<td>Rất thấp</td>
+<td>Yếu (brute force)</td>
+<td>Học lý thuyết</td>
+</tr>
+<tr>
+<td>Vigenère</td>
+<td>Trung bình</td>
+<td>Trung bình</td>
+<td>Giáo dục</td>
+</tr>
+<tr>
+<td>AES</td>
+<td>Cao</td>
+<td>Rất mạnh</td>
+<td>Thực tế (HTTPS, ngân hàng)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="3-bang-so-sanh-hash">3. Bảng so sánh hash</h3>
+<table>
+<thead>
+<tr>
+<th>Thuật toán</th>
+<th>Độ dài</th>
+<th>An toàn</th>
+<th>Ứng dụng</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MD5</td>
+<td>128-bit</td>
+<td>Yếu</td>
+<td>Cũ</td>
+</tr>
+<tr>
+<td>SHA-1</td>
+<td>160-bit</td>
+<td>Yếu/trung bình</td>
+<td>Cũ</td>
+</tr>
+<tr>
+<td>SHA-256</td>
+<td>256-bit</td>
+<td>Mạnh</td>
+<td>Hiện đại</td>
+</tr>
+</tbody>
+</table>
+<h3 id="4-code-so-sanh-hash">4. Code so sánh hash</h3>
+<pre data-lang="python"><code class="language-python">import hashlib
+
+text = &quot;HELLO&quot;
+for name in [&quot;md5&quot;, &quot;sha1&quot;, &quot;sha256&quot;]:
+    h = hashlib.new(name, text.encode()).hexdigest()
+    print(f&quot;{name:7s} | {len(h) * 4:3d} bit | {h}&quot;)
+
+# Thay doi 1 ky tu de quan sat avalanche
+for name in [&quot;md5&quot;, &quot;sha1&quot;, &quot;sha256&quot;]:
+    print(name, hashlib.new(name, b&quot;HELLO!&quot;).hexdigest())
+</code></pre>
+<p><strong>Giải thích:</strong> <code>hashlib.new(name, data)</code> tạo đối tượng hash theo tên; <code>len(h)*4</code> đổi số ký tự hex sang số bit (mỗi ký tự hex = 4 bit).</p>
+<h3 id="5-code-so-sanh-ma-hoa-cung-mot-chuoi">5. Code so sánh mã hóa cùng một chuỗi</h3>
+<pre data-lang="python"><code class="language-python"># Dung lai ham caesar_encrypt, vigenere (Bai 1, 3) va AES (Bai 6)
+text = &quot;HELLO&quot;
+print(&quot;Caesar  :&quot;, caesar_encrypt(text, 3))
+print(&quot;Vigenere:&quot;, vigenere(text, &quot;KEY&quot;))
+# AES: ban ma la byte ngau nhien, do dai bo i cua 16 -&gt; kho phan tich nhat
+</code></pre>
+<hr />
+<h1 id="phan-f-chu-ky-so-rsasha">PHẦN F. CHỮ KÝ SỐ RSA–SHA</h1>
+<h2 id="bai-13-tao-va-kiem-tra-chu-ky-so">Bài 13. Tạo và kiểm tra chữ ký số</h2>
+<h3 id="1-y-nghia_5">1. Ý nghĩa</h3>
+<p>Hiểu cách đạt <strong>ba tính chất</strong>: xác thực (đúng người ký), toàn vẹn (không bị sửa), chống chối bỏ (người ký không phủ nhận được). Bài ghép <strong>hàm băm + RSA</strong> — hai kiến thức trước đó.</p>
+<h3 id="2-nguyen-ly_7">2. Nguyên lý</h3>
+<ul>
+<li><strong>Ký:</strong> <code>h = SHA256(M)</code>, <code>S = h^d mod n</code> (dùng khóa <strong>bí mật</strong>).</li>
+<li><strong>Xác thực:</strong> <code>h1 = SHA256(M)</code>, <code>h2 = S^e mod n</code> (dùng khóa <strong>công khai</strong>); nếu <code>h1 = h2</code> → hợp lệ.</li>
+<li>Lý do băm trước: M có thể rất dài, ký trên hash ngắn nhanh và an toàn hơn.</li>
+</ul>
+<h3 id="3-code_6">3. Code</h3>
+<pre data-lang="python"><code class="language-python">import hashlib
+from math import gcd
+
+# 1. Tao cap khoa RSA (so nguyen to du lon hon de hash khong bi cat qua nhieu)
+p, q = 10007, 10009
+n = p * q
+phi = (p - 1) * (q - 1)
+e = 65537
+assert gcd(e, phi) == 1
+d = pow(e, -1, phi)
+
+def bam(msg):
+    # SHA-256 -&gt; so nguyen, rut gon mod n de nho hon n (chi de minh hoa)
+    return int(hashlib.sha256(msg.encode()).hexdigest(), 16) % n
+
+# 2. Ky
+M = &quot;Xin chao RSA&quot;
+h = bam(M)
+S = pow(h, d, n)                  # chu ky = h^d mod n
+print(&quot;Hash :&quot;, h)
+print(&quot;Chu ky:&quot;, S)
+
+# 3. Xac thuc
+def xac_thuc(msg, S):
+    h1 = bam(msg)                 # nguoi nhan tu bam lai thong diep
+    h2 = pow(S, e, n)             # giai chu ky bang khoa cong khai
+    return h1 == h2
+
+print(&quot;Hop le?       &quot;, xac_thuc(M, S))                 # True
+print(&quot;Bi sua noi dung?&quot;, xac_thuc(&quot;Xin chao RSA!&quot;, S)) # False
+</code></pre>
+<p><strong>Giải thích:</strong> chỉ người giữ <code>d</code> mới tạo được <code>S</code> sao cho <code>S^e mod n = h</code>. Nếu nội dung bị sửa, <code>h1</code> đổi (avalanche) → khác <code>h2</code> → phát hiện ngay.</p>
+<h3 id="4-luu-y_3">4. Lưu ý</h3>
+<p>Bản trên chỉ để minh họa công thức. Thực tế dùng RSA ≥ 2048 bit với padding <strong>PSS/PKCS#1 v1.5</strong> (ví dụ <code>Crypto.Signature.pss</code>).</p>
+<hr />
+<h1 id="phan-g-chung-thu-so-digital-certificate">PHẦN G. CHỨNG THƯ SỐ (DIGITAL CERTIFICATE)</h1>
+<h2 id="bai-14-chung-thu-so-va-pki">Bài 14. Chứng thư số và PKI</h2>
+<h3 id="1-y-nghia-tong-quat">1. Ý nghĩa tổng quát</h3>
+<p>Khóa công khai chỉ có ý nghĩa nếu <strong>chắc chắn nó thuộc đúng chủ thể</strong>. Chứng thư số do <strong>CA</strong> cấp chính là "căn cước" gắn danh tính với khóa công khai. Đây là nền tảng của HTTPS/TLS, chữ ký điện tử, hóa đơn điện tử, chính phủ điện tử.</p>
+<p>Chứng thư gồm: Subject, Public Key, Issuer (CA), Serial Number, thời hạn hiệu lực, thuật toán ký, chữ ký số của CA. PKI gồm: End User, CA, RA, kho lưu trữ.</p>
+<h3 id="bai-1-tao-cap-khoa-rsa-2048-bit">Bài 1 – Tạo cặp khóa RSA 2048-bit</h3>
+<p><em>Ý nghĩa:</em> mọi chứng thư bắt đầu từ cặp khóa; khóa bí mật phải giữ kín.</p>
+<pre data-lang="python"><code class="language-python">from cryptography.hazmat.primitives.asymmetric import rsa
+from cryptography.hazmat.primitives import serialization
+
+key = rsa.generate_private_key(public_exponent=65537, key_size=2048)
+
+with open(&quot;private.pem&quot;, &quot;wb&quot;) as f:
+    f.write(key.private_bytes(
+        serialization.Encoding.PEM,
+        serialization.PrivateFormat.TraditionalOpenSSL,
+        serialization.NoEncryption()))
+
+with open(&quot;public.pem&quot;, &quot;wb&quot;) as f:
+    f.write(key.public_key().public_bytes(
+        serialization.Encoding.PEM,
+        serialization.PublicFormat.SubjectPublicKeyInfo))
+</code></pre>
+<p><em>Giải thích:</em> <code>generate_private_key</code> sinh khóa; <code>private_bytes</code>/<code>public_bytes</code> xuất ra định dạng PEM (văn bản Base64) để lưu file.</p>
+<h3 id="bai-2-tao-csr-yeu-cau-cap-chung-thu">Bài 2 – Tạo CSR (yêu cầu cấp chứng thư)</h3>
+<p><em>Ý nghĩa:</em> CSR là "đơn xin cấp chứng thư": chứa thông tin danh tính + khóa công khai, được ký bằng khóa bí mật để chứng minh sở hữu khóa.</p>
+<pre data-lang="python"><code class="language-python">from cryptography import x509
+from cryptography.x509.oid import NameOID
+from cryptography.hazmat.primitives import hashes
+
+csr = (x509.CertificateSigningRequestBuilder()
+    .subject_name(x509.Name([
+        x509.NameAttribute(NameOID.COMMON_NAME, &quot;Nguyen Van A&quot;),
+        x509.NameAttribute(NameOID.ORGANIZATION_NAME, &quot;ABC Company&quot;),
+        x509.NameAttribute(NameOID.ORGANIZATIONAL_UNIT_NAME, &quot;IT Department&quot;),
+        x509.NameAttribute(NameOID.COUNTRY_NAME, &quot;VN&quot;),
+    ]))
+    .sign(key, hashes.SHA256()))
+
+with open(&quot;request.csr&quot;, &quot;wb&quot;) as f:
+    f.write(csr.public_bytes(serialization.Encoding.PEM))
+</code></pre>
+<h3 id="bai-3-chung-thu-tu-ky-self-signed-365-ngay">Bài 3 – Chứng thư tự ký (Self-Signed, 365 ngày)</h3>
+<p><em>Ý nghĩa:</em> hiểu cơ chế cấp phát: ở chứng thư tự ký, Issuer = Subject (tự làm CA). Dùng để thử nghiệm; trình duyệt không tin cậy mặc định.</p>
+<pre data-lang="python"><code class="language-python">import datetime
+
+subject = issuer = x509.Name([
+    x509.NameAttribute(NameOID.COMMON_NAME, &quot;Nguyen Van A&quot;),
+    x509.NameAttribute(NameOID.ORGANIZATION_NAME, &quot;ABC Company&quot;),
+    x509.NameAttribute(NameOID.COUNTRY_NAME, &quot;VN&quot;),
+])
+now = datetime.datetime.now(datetime.timezone.utc)
+
+cert = (x509.CertificateBuilder()
+    .subject_name(subject)
+    .issuer_name(issuer)                       # tu ky: issuer = subject
+    .public_key(key.public_key())
+    .serial_number(x509.random_serial_number())
+    .not_valid_before(now)
+    .not_valid_after(now + datetime.timedelta(days=365))
+    .sign(key, hashes.SHA256()))               # ky bang khoa bi mat
+
+with open(&quot;cert.pem&quot;, &quot;wb&quot;) as f:
+    f.write(cert.public_bytes(serialization.Encoding.PEM))
+</code></pre>
+<p>Tương đương dòng lệnh OpenSSL:</p>
+<pre data-lang="bash"><code class="language-bash">openssl genrsa -out private.pem 2048
+openssl req -new -key private.pem -out request.csr
+openssl x509 -req -days 365 -in request.csr -signkey private.pem -out cert.pem
+</code></pre>
+<h3 id="bai-4-xem-thong-tin-chung-thu">Bài 4 – Xem thông tin chứng thư</h3>
+<p><em>Ý nghĩa:</em> biết cấu trúc X.509 và đọc từng trường.</p>
+<pre data-lang="python"><code class="language-python">c = x509.load_pem_x509_certificate(open(&quot;cert.pem&quot;, &quot;rb&quot;).read())
+print(&quot;Version   :&quot;, c.version)
+print(&quot;Serial    :&quot;, c.serial_number)
+print(&quot;Issuer    :&quot;, c.issuer.rfc4514_string())
+print(&quot;Subject   :&quot;, c.subject.rfc4514_string())
+print(&quot;Valid From:&quot;, c.not_valid_before_utc)
+print(&quot;Valid To  :&quot;, c.not_valid_after_utc)
+print(&quot;Sig Algo  :&quot;, c.signature_algorithm_oid._name)
+print(&quot;Public key:&quot;, c.public_key().key_size, &quot;bit&quot;)
+</code></pre>
+<p>(Hoặc: <code>openssl x509 -in cert.pem -text -noout</code>)</p>
+<h3 id="bai-5-kiem-tra-tinh-hop-le">Bài 5 – Kiểm tra tính hợp lệ</h3>
+<p><em>Ý nghĩa:</em> một chứng thư chỉ đáng tin khi: (1) chữ ký của CA đúng, (2) còn hạn, (3) chuỗi chứng thực dẫn tới CA gốc tin cậy.</p>
+<pre data-lang="python"><code class="language-python">now = datetime.datetime.now(datetime.timezone.utc)
+con_han = c.not_valid_before_utc &lt;= now &lt;= c.not_valid_after_utc
+print(&quot;Con han:&quot;, con_han)
+
+# Kiem tra chu ky cua issuer (o day tu ky nen dung chinh public key)
+from cryptography.hazmat.primitives.asymmetric import padding
+try:
+    key.public_key().verify(
+        c.signature, c.tbs_certificate_bytes,
+        padding.PKCS1v15(), c.signature_hash_algorithm)
+    print(&quot;Chu ky CA hop le&quot;)
+except Exception:
+    print(&quot;Chu ky KHONG hop le&quot;)
+</code></pre>
+<p>Lệnh OpenSSL: <code>openssl verify -CAfile ca.pem cert.pem</code></p>
+<h3 id="bai-6-dung-chung-thu-e-ky-ien-tu">Bài 6 – Dùng chứng thư để ký điện tử</h3>
+<p><em>Ý nghĩa:</em> ghép chứng thư (cho khóa công khai tin cậy) với chữ ký số (Bài 13).</p>
+<pre data-lang="python"><code class="language-python">from cryptography.hazmat.primitives.asymmetric import padding
+
+van_ban = b&quot;Hop dong so 01&quot;
+chu_ky = key.sign(van_ban, padding.PKCS1v15(), hashes.SHA256())   # bam SHA-256 roi ky
+
+pub = c.public_key()                       # lay khoa cong khai TU CHUNG THU
+try:
+    pub.verify(chu_ky, van_ban, padding.PKCS1v15(), hashes.SHA256())
+    print(&quot;Chu ky hop le&quot;)
+except Exception:
+    print(&quot;Chu ky khong hop le&quot;)
+</code></pre>
+<p><em>Giải thích:</em> <code>sign</code> tự băm bằng SHA-256 rồi ký; người nhận lấy khóa công khai từ chứng thư để <code>verify</code>.</p>
+<h3 id="bai-7-het-han-va-thu-hoi">Bài 7 – Hết hạn và thu hồi</h3>
+<p><em>Ý nghĩa:</em> chứng thư có vòng đời; khi lộ khóa hoặc sai thông tin, CA đưa serial vào <strong>CRL</strong> (hoặc OCSP) để mọi bên biết không còn tin cậy.</p>
+<pre data-lang="python"><code class="language-python"># Mo phong het han: tao chung thu co not_valid_after trong qua khu
+cu = (x509.CertificateBuilder()
+    .subject_name(subject).issuer_name(issuer)
+    .public_key(key.public_key())
+    .serial_number(x509.random_serial_number())
+    .not_valid_before(now - datetime.timedelta(days=400))
+    .not_valid_after(now - datetime.timedelta(days=35))
+    .sign(key, hashes.SHA256()))
+print(&quot;Con han?&quot;, cu.not_valid_before_utc &lt;= now &lt;= cu.not_valid_after_utc)  # False
+
+# Mo phong CRL don gian: danh sach serial bi thu hoi
+crl = {cert.serial_number}
+print(&quot;Bi thu hoi?&quot;, cert.serial_number in crl)
+</code></pre>
+<hr />
+<h1 id="phan-h-tom-tat-nhanh-e-hoc-thuoc">PHẦN H. TÓM TẮT NHANH ĐỂ HỌC THUỘC</h1>
+<table>
+<thead>
+<tr>
+<th>Chủ đề</th>
+<th>Từ khóa quan trọng</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Caesar</td>
+<td>C=(P+k) mod 26, 25 khóa, brute force</td>
+</tr>
+<tr>
+<td>Thay thế</td>
+<td>26! khóa, bị phá bằng tần suất</td>
+</tr>
+<tr>
+<td>Vigenère</td>
+<td>khóa dạng từ, đa bảng, Kasiski</td>
+</tr>
+<tr>
+<td>Affine</td>
+<td>C=(aP+b) mod 26, gcd(a,26)=1, nghịch đảo modulo</td>
+</tr>
+<tr>
+<td>DES</td>
+<td>khối 64, khóa 56, Feistel 16 vòng, đã lỗi thời</td>
+</tr>
+<tr>
+<td>AES</td>
+<td>khối 128, khóa 128/192/256, CBC+IV, chuẩn hiện nay</td>
+</tr>
+<tr>
+<td>RSA</td>
+<td>n=pq, e·d≡1 mod φ(n), khóa công khai/bí mật</td>
+</tr>
+<tr>
+<td>MD5</td>
+<td>128-bit, một chiều, avalanche, collision</td>
+</tr>
+<tr>
+<td>SHA-1 / SHA-256</td>
+<td>160-bit (yếu) / 256-bit (mạnh)</td>
+</tr>
+<tr>
+<td>Chữ ký số</td>
+<td>Băm → ký bằng khóa bí mật → xác thực bằng khóa công khai</td>
+</tr>
+<tr>
+<td>Chứng thư số</td>
+<td>Subject+PublicKey+Issuer+hạn+chữ ký CA; PKI, CRL</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Ba tính chất của chữ ký số:</strong> Xác thực – Toàn vẹn – Chống chối bỏ.
+<strong>Ba kiểu tấn công:</strong> Vét cạn – Phân tích tần suất – Va chạm.
+<strong>Quy tắc chọn:</strong> mã hóa dữ liệu → AES; trao đổi khóa/ký → RSA; kiểm tra toàn vẹn → SHA-256.</p>
+  </main>
+</div>
+<script>
+document.querySelectorAll('table').forEach(t => {
+  const w = document.createElement('div'); w.className = 'table-wrap';
+  t.parentNode.insertBefore(w, t); w.appendChild(t);
+});
+document.querySelectorAll('pre').forEach(pre => {
+  const b = document.createElement('button');
+  b.className = 'copy'; b.textContent = 'Sao chép';
+  b.onclick = () => {
+    const text = pre.querySelector('code').innerText;
+    const done = () => { b.textContent = 'Đã chép'; setTimeout(() => b.textContent = 'Sao chép', 1500); };
+    if (navigator.clipboard) navigator.clipboard.writeText(text).then(done);
+    else {
+      const ta = document.createElement('textarea'); ta.value = text;
+      document.body.appendChild(ta); ta.select(); document.execCommand('copy');
+      ta.remove(); done();
+    }
+  };
+  pre.appendChild(b);
+});
+</script>
+</body>
+</html>
